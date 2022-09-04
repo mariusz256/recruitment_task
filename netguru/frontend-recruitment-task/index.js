@@ -1,10 +1,9 @@
 const randomWord = async () => {
-  const wordLength = Math.floor(Math.random() * 11) + 1;
   const word = await fetch(
-    `https://random-word-api.herokuapp.com/word?length=${wordLength}`
+    `https://random-words-api.vercel.app/word/noun`
   ).then((res) => res.json());
 
-  return word[0];
+  return word[0].word;
 };
 
 const state = {
@@ -12,6 +11,11 @@ const state = {
 };
 
 const getWord = async () => {
-  state.word = await randomWord();
-  console.log(state);
+  const word = await randomWord();
+  if (word.length <= 11) {
+    // we have space for 11 letters
+    state.word = word;
+    return;
+  }
+  return getWord();
 };

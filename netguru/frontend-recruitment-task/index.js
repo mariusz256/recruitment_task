@@ -19,3 +19,9 @@ const getWord = async () => {
   }
   return getWord();
 };
+
+window.addEventListener("keydown", (e) => {
+  if (/^[A-Za-z]+$/.test(e.key)) {
+    console.log(e);
+  }
+});

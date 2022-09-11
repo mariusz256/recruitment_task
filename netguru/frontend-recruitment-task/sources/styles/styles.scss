@@ -21,7 +21,6 @@ body {
 
 .board {
   position: relative;
-  // background: #fff;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -61,11 +60,76 @@ body {
   height: 100%;
   min-height: 600px;
   display: flex;
-  padding: 40px;
+  margin-top: 40px;
+  overflow: hidden;
 
   &__hangman {
-    height: 80%;
     width: 50%;
+    position: relative;
+
+    & img {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      left: 15rem;
+    }
+
+    &__bar {
+      left: -10.2rem !important;
+      transform: translate(0%, 0%) !important;
+    }
+    &__head {
+      top: 10rem;
+      z-index: 10;
+    }
+    &__neck {
+      top: 17rem;
+      z-index: 0;
+    }
+    &__corpus {
+      top: 23rem;
+      z-index: 10;
+    }
+
+    &__left-arm {
+      top: 21.6rem;
+      left: calc(15rem - 4.5rem) !important;
+      z-index: 2;
+    }
+
+    &__right-arm {
+      top: 21.6rem;
+      left: calc(15rem + 4.5rem) !important;
+
+      z-index: 2;
+    }
+    &__hand {
+      top: 23.8rem;
+      transform: translateX(-8.8rem) !important;
+      z-index: 1;
+
+      &--right {
+        z-index: 1;
+        transform: translateX(calc(8.8rem - 100%)) !important;
+      }
+    }
+
+    &__leg {
+      z-index: 2;
+      top: 25rem;
+      transform: translateX(-5.1rem) !important;
+      &--right {
+        transform: scaleX(-1) !important;
+      }
+    }
+
+    &__foot {
+      top: 35rem;
+      z-index: 1;
+      transform: translateX(-7.5rem) !important;
+      &--right {
+        transform: scaleX(-1) translateX(calc(-7.5rem + 100%)) !important;
+      }
+    }
   }
 
   &__missed {
@@ -76,9 +140,16 @@ body {
       height: 100px;
       width: 50px;
       display: flex;
+
+      & > p {
+        padding: 0.2em;
+        color: #4d71fa;
+        font-size: 64px;
+        text-transform: uppercase;
+      }
     }
 
-    p {
+    & > p {
       text-transform: uppercase;
       color: #53555d;
       font-size: 32px;
@@ -95,9 +166,19 @@ body {
   justify-content: space-between;
 
   &__letter {
-    width: 125px;
+    display: flex;
     height: 125px;
+    width: 125px;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    text-transform: uppercase;
+    font-size: 64px;
     background-color: rgba(230, 230, 231, 0.9);
     border-radius: 10px;
+
+    &--avalible {
+      background-color: #53555d;
+    }
   }
 }

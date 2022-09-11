@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Hangman</title>
     <link rel="stylesheet" href="./css/styles.css" />
-    <script src="index.js" type="text/javascript"></script>
+    <script src="index.js" defer typ="text/javascript"></script>
   </head>
   <body onload="getWord()">
     <div class="board">
@@ -14,21 +14,23 @@
         <div class="game_result__hangman"></div>
         <div class="game_result__missed">
           <p>You missed:</p>
-          <div class="game_result__missed__letters"></div>
+          <div class="game_result__missed__letters">
+            <!-- <p class="game_result__missed__letters__letter">a</p> -->
+          </div>
         </div>
       </div>
       <div class="letters_container">
-        <div class="letters_container__letter"></div>
-        <div class="letters_container__letter"></div>
-        <div class="letters_container__letter"></div>
-        <div class="letters_container__letter"></div>
-        <div class="letters_container__letter"></div>
-        <div class="letters_container__letter"></div>
-        <div class="letters_container__letter"></div>
-        <div class="letters_container__letter"></div>
-        <div class="letters_container__letter"></div>
-        <div class="letters_container__letter"></div>
-        <div class="letters_container__letter"></div>
+        <div id="0" class="letters_container__letter"></div>
+        <div id="1" class="letters_container__letter"></div>
+        <div id="2" class="letters_container__letter"></div>
+        <div id="3" class="letters_container__letter"></div>
+        <div id="4" class="letters_container__letter"></div>
+        <div id="5" class="letters_container__letter"></div>
+        <div id="6" class="letters_container__letter"></div>
+        <div id="7" class="letters_container__letter"></div>
+        <div id="8" class="letters_container__letter"></div>
+        <div id="9" class="letters_container__letter"></div>
+        <div id="10" class="letters_container__letter"></div>
       </div>
     </div>
   </body>

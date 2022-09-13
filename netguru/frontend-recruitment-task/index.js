@@ -1,22 +1,8 @@
-const randomWord = async () => {
-  const word = await fetch(
-    `https://random-words-api.vercel.app/word/noun`
-  ).then((res) => res.json());
-
-  return word[0].word;
+const state = {
+  word: [],
+  wrong: [],
+  valid: [],
 };
-
-async function getWord() {
-  const word = await randomWord();
-  if (word.length <= 11) {
-    // we have space for 11 letters
-    state.word = word.toUpperCase();
-    changeLetterFieldColor(word.length);
-    return;
-  }
-  console.log(word.length);
-  getWord();
-}
 
 const hangmanParts = {
   1: {
@@ -93,11 +79,27 @@ const hangmanParts = {
   },
 };
 
-const state = {
-  word: "",
-  wrong: [],
-  valid: [],
-};
+async function getWord() {
+  const word = await fetch(`https://random-words-api.vercel.app/word/noun`)
+    .then((res) => res.json())
+    .then((word) => word[0].word);
+
+  if (word.length <= 11) {
+    // we have space for 11 letters
+    state.word = word.toUpperCase().split("");
+    changeCorrectLetterFieldColor(state);
+    return;
+  }
+  getWord();
+}
+
+function changeCorrectLetterFieldColor({ word }) {
+  const deleteAmount = correctLetterFields.length - word.length;
+  correctLetterFields.splice(0, deleteAmount);
+  correctLetterFields.forEach((el) => {
+    el.classList.add("letters_container__letter--avalible");
+  });
+}
 
 const missedLettersContainer = document.body.querySelector(
   ".game_result__missed__letters"
@@ -109,28 +111,40 @@ const correctLetterFields = [
 
 const hangman = document.body.querySelector(".game_result__hangman");
 
-function changeLetterFieldColor(letterNumber) {
-  const deleteAmount = correctLetterFields.length - letterNumber;
-  correctLetterFields.splice(0, deleteAmount);
-  correctLetterFields.forEach((el) => {
-    el.classList.add("letters_container__letter--avalible");
-  });
+window.addEventListener("keydown", (e) => {
+  if (/^[A-Za-z]+$/.test(e.key) && e.key.length == 1) {
+    checkLetter(e.key.toUpperCase(), state);
+  }
+  console.log(state, e.key.toUpperCase());
+});
+
+function checkLetter(letter, state) {
+  const { word, wrong, valid } = state;
+  if (!word.includes(letter) && !wrong.includes(letter)) {
+    const partNumber = wrong.length + 1;
+    hangman.append(createHangmanPart(hangmanParts[partNumber]));
+    wrong.push(letter);
+    missedLettersContainer.append(renderMissedLetter(letter));
+  }
+
+  if (word.includes(letter) && !valid.includes(letter)) {
+    valid.push(letter);
+    renderValidLetter(letter, word);
+  }
+
+  isGameOver(state);
 }
 
-function insertMissedLetter(letter) {
+function renderMissedLetter(letter) {
   const p = document.createElement("p");
   p.textContent = letter;
   return p;
 }
 
-function inserdValidLetter(letter, answer) {
-  const splitAnswer = answer.split("");
-  const letterIds = splitAnswer.map((value, id) => {
-    console.log(value, id);
+function renderValidLetter(letter, word) {
+  const letterIds = word.map((value, id) => {
     if (value === letter) return id;
   });
-
-  console.log(letterIds);
 
   correctLetterFields.forEach((el, id) => {
     if (letterIds.includes(id)) el.textContent = letter;
@@ -138,7 +152,6 @@ function inserdValidLetter(letter, answer) {
 }
 
 function createHangmanPart(part) {
-  console.log(part);
   const element = document.createElement("img");
   Object.assign(element, {
     src: part.src,
@@ -151,28 +164,44 @@ function createHangmanPart(part) {
   return element;
 }
 
-function renderHangmanPart(part) {
-  hangman.append(createHangmanPart(hangmanParts[part]));
+function isGameOver(state) {
+  const won = state.word.every((value) => {
+    return state.valid.includes(value);
+  });
+
+  if (state.wrong.length >= 11 || won) {
+    const modal = document.createElement("div");
+    modal.className = "game_over";
+    const gameOver = document.createElement("p");
+    gameOver.textContent = "GAME OVER";
+    const button = document.createElement("button");
+    button.addEventListener("click", () => reset(state, modal));
+    button.textContent = "NEW WORD";
+
+    document.body.appendChild(modal);
+    modal.appendChild(gameOver);
+    modal.appendChild(button);
+  }
 }
 
-function checkLetter(letter, state) {
-  if (!state.word.includes(letter) && !state.wrong.includes(letter)) {
-    const partNumber = state.wrong.length + 1;
-    renderHangmanPart(partNumber);
-    state.wrong.push(letter);
+function reset(state, modal) {
+  state.wrong = [];
+  state.valid = [];
 
-    missedLettersContainer.append(insertMissedLetter(letter));
-  }
+  // set initial color of valid fields on reset
+  correctLetterFields.forEach((el) => {
+    el.classList.remove("letters_container__letter--avalible");
+  });
 
-  if (state.word.includes(letter) && !state.valid.includes(letter)) {
-    state.valid.push(letter);
-    inserdValidLetter(letter, state.word);
-  }
+  //clear hangman
+  hangman.innerHTML = "";
+
+  // clear wrong letter
+  missedLettersContainer.innerHTML = "";
+
+  // clear textContext in valid letter
+  correctLetterFields.forEach((el) => (el.textContent = ""));
+
+  getWord();
+  modal.remove();
 }
-
-window.addEventListener("keydown", (e) => {
-  if (/^[A-Za-z]+$/.test(e.key) && e.key.length == 1) {
-    checkLetter(e.key.toUpperCase(), state);
-  }
-  console.log(state, e.key.toUpperCase());
-});

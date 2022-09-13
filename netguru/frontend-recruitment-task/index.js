@@ -88,6 +88,7 @@ async function getWord() {
     // we have space for 11 letters
     state.word = word.toUpperCase().split("");
     changeCorrectLetterFieldColor(state);
+    window.addEventListener("keydown", keydownEvent);
     return;
   }
   getWord();
@@ -111,12 +112,12 @@ const correctLetterFields = [
 
 const hangman = document.body.querySelector(".game_result__hangman");
 
-window.addEventListener("keydown", (e) => {
+function keydownEvent(e) {
   if (/^[A-Za-z]+$/.test(e.key) && e.key.length == 1) {
     checkLetter(e.key.toUpperCase(), state);
   }
   console.log(state, e.key.toUpperCase());
-});
+}
 
 function checkLetter(letter, state) {
   const { word, wrong, valid } = state;
@@ -169,7 +170,8 @@ function isGameOver(state) {
     return state.valid.includes(value);
   });
 
-  if (state.wrong.length >= 11 || won) {
+  if (state.wrong.length > 11 || won) {
+    window.removeEventListener("keydown", keydownEvent);
     const modal = document.createElement("div");
     modal.className = "game_over";
     const gameOver = document.createElement("p");

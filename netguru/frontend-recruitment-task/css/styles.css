@@ -21,8 +21,8 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 100%;
-  width: 80%;
+  height: 50rem;
+  width: 80rem;
   border-radius: 10px;
   overflow: hidden; }
   .board::before {
@@ -49,21 +49,22 @@ body {
 .game_result {
   z-index: 2;
   height: 100%;
-  min-height: 600px;
   display: flex;
-  margin-top: 40px;
+  margin-top: 4rem;
   overflow: hidden; }
   .game_result__hangman {
     width: 50%;
-    height: 50%;
+    height: 100%;
     position: relative;
-    object-fit: scale-down; }
+    scale: 0.75;
+    top: calc(-12.5%);
+    left: calc(-12.5%); }
     .game_result__hangman img {
       position: absolute;
       transform: translate(-50%, -50%);
-      left: 15rem; }
+      left: 20rem; }
     .game_result__hangman__bar {
-      left: -10.2rem !important;
+      left: -5.2rem !important;
       transform: translate(0%, 0%) !important; }
     .game_result__hangman__head {
       top: 10rem;
@@ -76,11 +77,11 @@ body {
       z-index: 10; }
     .game_result__hangman__left-arm {
       top: 21.6rem;
-      left: calc(15rem - 4.5rem) !important;
+      transform: translate(-50%, -50%) translateX(-4.5rem) !important;
       z-index: 2; }
     .game_result__hangman__right-arm {
       top: 21.6rem;
-      left: calc(15rem + 4.5rem) !important;
+      transform: translate(-50%, -50%) translateX(4.5rem) !important;
       z-index: 2; }
     .game_result__hangman__hand {
       top: 23.8rem;
@@ -108,31 +109,30 @@ body {
       width: 50px;
       display: flex; }
       .game_result__missed__letters > p {
-        padding: 0.2em;
+        padding: 0.4rem;
         color: #4d71fa;
-        font-size: 64px;
+        font-size: 4rem;
         text-transform: uppercase; }
     .game_result__missed > p {
       text-transform: uppercase;
       color: #53555d;
-      font-size: 32px; }
+      font-size: 2rem; }
 
 .letters_container {
   z-index: 1;
-  height: 100%;
-  width: 100%;
-  padding: 40px;
+  padding-top: 2rem;
+  margin: 0rem 3rem 4rem 3rem;
   display: flex;
   justify-content: space-between; }
   .letters_container__letter {
     display: flex;
-    height: 125px;
-    width: 125px;
+    height: 6.2rem;
+    width: 6.2rem;
     align-items: center;
     justify-content: center;
     color: #fff;
     text-transform: uppercase;
-    font-size: 64px;
+    font-size: 4rem;
     background-color: rgba(230, 230, 231, 0.9);
     border-radius: 10px; }
     .letters_container__letter--avalible {
